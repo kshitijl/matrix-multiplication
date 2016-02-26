@@ -13,8 +13,6 @@ template<typename TT>
 void matrix_multiply(const TT * AA, const TT * BB, TT * CC, size_t nn);
 
 void timetrial(size_t nn, unsigned long ntrials) {
-    
-    typedef float real_t;
     real_t *aa, *bb, *cc;
 
     aa = (real_t *)malloc(sizeof(real_t)*nn*nn);
@@ -47,7 +45,13 @@ void timetrial(size_t nn, unsigned long ntrials) {
 }
 
 int main(int argc, char **argv) {
-    for(int ii = 5; ii < 2000; ++ii) {
+    assert(argc <= 2);
+
+    int stepsize = 1;
+    if (argc == 2)
+        stepsize = std::atoi(argv[1]);
+    
+    for(int ii = 5; ii < 2000; ii += stepsize) {
         size_t nn = ii;
         timetrial(nn, std::max(1e9/(nn*nn*nn), 5.0));
         std::cout.flush();
