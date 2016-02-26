@@ -1,1 +1,1 @@
-g++ -Wall -std=c++11 -O3 cpu-simple.cxx print-matrix.cxx
+g++ -Wall -std=c++11 -O3 test-bed.cxx "$@"
