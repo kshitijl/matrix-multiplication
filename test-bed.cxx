@@ -19,7 +19,6 @@ void timetrial(size_t nn, unsigned long ntrials) {
     bb = (real_t *)malloc(sizeof(real_t)*nn*nn);
     cc = (real_t *)malloc(sizeof(real_t)*nn*nn);
 
-    srand(1);
     for(size_t ii = 0; ii < nn*nn; ++ii) {
         aa[ii] = (real_t)rand() / RAND_MAX;
         bb[ii] = (real_t)rand() / RAND_MAX;
@@ -32,26 +31,31 @@ void timetrial(size_t nn, unsigned long ntrials) {
 
     auto end = std::chrono::high_resolution_clock::now();
 
-    // 1e-6 seconds
-    double micro_seconds = std::chrono::duration<double, std::micro>(end-begin).count();
+    // 1e-9 seconds
+    double nano_seconds = std::chrono::duration<double, std::nano>(end-begin).count();
 
     // ntrials * nn^3 mults, same number of adds
-    double megaflops = 2*nn*nn*nn*ntrials/micro_seconds;
+    double gigaflops = 2*nn*nn*nn*ntrials/nano_seconds;
 
+    real_t answer_hash = 0;
+    for(unsigned ii = 0; ii < nn*nn; ++ii)
+        answer_hash += cc[ii]*(real_t)ii;
     
-    std::cout << "N = " << nn << ", megaflops = " <<  megaflops << ", size = " << 3*nn*nn*sizeof(real_t) << ", ntrials = " << ntrials << "\n";
+    std::cout << "N = " << nn << ", gigaflops = " <<  gigaflops << ", size = " << 3*nn*nn*sizeof(real_t) << ", ntrials = " << ntrials << ", hash = " << answer_hash << "\n";
 
     free(aa); free(bb); free(cc);
 }
 
 int main(int argc, char **argv) {
     assert(argc <= 2);
+    srand(2);
 
     int stepsize = 1;
     if (argc == 2)
         stepsize = std::atoi(argv[1]);
-    
-    for(int ii = 5; ii < 2000; ii += stepsize) {
+
+    timetrial(5, 1e6);
+    for(int ii = stepsize; ii < 20000; ii += stepsize) {
         size_t nn = ii;
         timetrial(nn, std::max(1e9/(nn*nn*nn), 5.0));
         std::cout.flush();
