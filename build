@@ -1,6 +1,11 @@
-GCC="g++ -Wall -std=c++11 -O3 test-bed.cxx"
+GCC="nvcc -std=c++11 -O3 test-bed.cxx"
 
-for impl in cpu-schoolbook cpu-inner-reordered cpu-blas; do
-	$GCC -D real_t=float $impl.cxx -o bin/$impl-float -lblas
-	$GCC -D real_t=double $impl.cxx -o bin/$impl-double -lblas
+for impl in cpu-schoolbook cpu-inner-reordered cpu-blas gpu-schoolbook; do
+	CFILE=$impl.cxx
+	if [ -e $impl.cu ]
+	   then
+		CFILE=$impl.cu
+	fi
+	$GCC -D real_t=float $CFILE -o bin/$impl-float -lblas
+	$GCC -D real_t=double $CFILE -o bin/$impl-double -lblas
 done

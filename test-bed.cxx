@@ -20,8 +20,8 @@ void timetrial(size_t nn, unsigned long ntrials) {
     cc = (real_t *)malloc(sizeof(real_t)*nn*nn);
 
     for(size_t ii = 0; ii < nn*nn; ++ii) {
-        aa[ii] = (real_t)rand() / RAND_MAX;
-        bb[ii] = (real_t)rand() / RAND_MAX;
+        aa[ii] = (real_t)rand() / RAND_MAX - 0.5;
+        bb[ii] = (real_t)rand() / RAND_MAX - 0.5;
     }
 
     auto begin = std::chrono::high_resolution_clock::now();
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     if (argc == 2)
         stepsize = std::atoi(argv[1]);
 
-    timetrial(5, 1e6);
+    timetrial(5, 1e2);
     for(int ii = stepsize; ii < 20000; ii += stepsize) {
         size_t nn = ii;
         timetrial(nn, std::max(1e9/(nn*nn*nn), 5.0));
