@@ -6,9 +6,10 @@ __global__ void mm_kernel(const TT * AA, const TT * BB, TT * CC, size_t nn) {
     unsigned int jj = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int index = ii*nn + jj;
     if(ii < nn and jj < nn) {
-        CC[index] = 0;
+        TT answer = 0;
         for(int kk = 0; kk < nn; ++kk)
-            CC[index] += AA[ii*nn + kk] * BB[kk*nn + jj];
+            answer += AA[ii*nn + kk] * BB[kk*nn + jj];
+        CC[index] = answer;
     }
 }
 
