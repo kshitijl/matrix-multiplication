@@ -1,6 +1,6 @@
 GCC="nvcc -std=c++11 -O3 test-bed.cxx"
 
-for impl in cpu-schoolbook cpu-inner-reordered cpu-blas gpu-schoolbook; do
+for impl in cpu-schoolbook cpu-inner-reordered cpu-blas gpu-schoolbook gpu-tiled; do
 	CFILE=$impl.cxx
 	if [ -e $impl.cu ]
 	   then
